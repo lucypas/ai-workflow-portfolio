@@ -1,0 +1,13 @@
+{
+  "dataset_name": "customer_journey_events",
+  "columns": ["customer_id", "event_timestamp", "channel", "event_type", "campaign_id"],
+  "row_count": 250000,
+  "null_rates": {
+    "customer_id": 0.0,
+    "event_timestamp": 0.01,
+    "channel": 0.03,
+    "event_type": 0.02,
+    "campaign_id": 0.18
+  },
+  "freshness_hours": 6
+}
