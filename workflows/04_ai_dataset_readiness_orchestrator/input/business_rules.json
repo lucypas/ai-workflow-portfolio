@@ -1,0 +1,25 @@
+{
+  "rules": [
+    {
+      "name": "Minimum row count",
+      "field": "row_count",
+      "operator": ">=",
+      "value": 100000,
+      "severity": "high"
+    },
+    {
+      "name": "Freshness SLA",
+      "field": "freshness_hours",
+      "operator": "<=",
+      "value": 24,
+      "severity": "medium"
+    },
+    {
+      "name": "Duplicate rate threshold",
+      "field": "duplicate_rate",
+      "operator": "<=",
+      "value": 0.02,
+      "severity": "medium"
+    }
+  ]
+}

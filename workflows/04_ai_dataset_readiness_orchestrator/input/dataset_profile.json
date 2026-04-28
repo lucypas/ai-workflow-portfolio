@@ -1,0 +1,27 @@
+{
+  "dataset_name": "customer_journey_events",
+  "owner": "data_platform_team",
+  "source_system": "mock_cdp",
+  "columns": [
+    "customer_id",
+    "event_timestamp",
+    "channel",
+    "event_type",
+    "campaign_id",
+    "session_id",
+    "region"
+  ],
+  "row_count": 250000,
+  "null_rates": {
+    "customer_id": 0.0,
+    "event_timestamp": 0.01,
+    "channel": 0.03,
+    "event_type": 0.02,
+    "campaign_id": 0.18,
+    "session_id": 0.07,
+    "region": 0.04
+  },
+  "freshness_hours": 6,
+  "duplicate_rate": 0.012,
+  "schema_version": "1.0.0"
+}

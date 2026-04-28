@@ -1,0 +1,27 @@
+{
+  "required_columns": [
+    "customer_id",
+    "event_timestamp",
+    "channel",
+    "event_type",
+    "region"
+  ],
+  "critical_columns": [
+    "customer_id",
+    "event_timestamp",
+    "channel",
+    "event_type"
+  ],
+  "max_null_rate_critical": 0.05,
+  "max_freshness_hours": 24,
+  "max_duplicate_rate": 0.02,
+  "minimum_row_count": 100000,
+  "accepted_channels": [
+    "web",
+    "mobile",
+    "email",
+    "paid_media",
+    "call_center"
+  ],
+  "required_schema_version": "1.0.0"
+}
