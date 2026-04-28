@@ -1,5 +1,3 @@
-"""Runnable dataset onboarding reviewer."""
-
 import json
 from pathlib import Path
 
@@ -7,15 +5,24 @@ from validation import validate_dataset
 
 
 def generate_review_summary(validation_result: dict) -> str:
-    """Generate an executive-readable dataset onboarding summary."""
     dataset = validation_result["dataset_name"]
-    status = validation_result["status"]
+    decision = validation_result["decision"]
+    score = validation_result["readiness_score"]
     issues = validation_result["issues"]
 
-    if status == "approved":
-        return f"{dataset} passed onboarding checks and is ready for downstream workflow use."
+    if decision == "GO":
+        return (
+            f"{dataset} passed intake checks with a readiness score of {score}/100. "
+            "The dataset is ready for downstream workflow use."
+        )
 
-    summary = f"{dataset} requires review before onboarding.\n\nIssues found:\n"
+    summary = (
+        f"{dataset} requires review before onboarding.\n"
+        f"Decision: {decision}\n"
+        f"Readiness Score: {score}/100\n\n"
+        "Issues found:\n"
+    )
+
     for issue in issues:
         summary += f"- {issue['severity'].upper()}: {issue['type']}"
 
@@ -27,16 +34,21 @@ def generate_review_summary(validation_result: dict) -> str:
 
         summary += "\n"
 
+    if decision == "GO_WITH_WARNINGS":
+        summary += "\nRecommended Action: Proceed with monitoring and assign owners for warnings."
+    else:
+        summary += "\nRecommended Action: Block onboarding until remediation is complete."
+
     return summary
 
 
-def main() -> None:
+def main():
     base_path = Path(__file__).resolve().parents[1]
 
-    with open(base_path / "input" / "dataset_profile.json", encoding="utf-8") as f:
+    with open(base_path / "input" / "dataset_profile.json") as f:
         dataset_profile = json.load(f)
 
-    with open(base_path / "input" / "expected_output.json", encoding="utf-8") as f:
+    with open(base_path / "input" / "expected_output.json") as f:
         expected_output = json.load(f)
 
     validation_result = validate_dataset(dataset_profile, expected_output)

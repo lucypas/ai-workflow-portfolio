@@ -1,22 +1,37 @@
-"""Executive status summary workflow."""
-
-import json
-from pathlib import Path
+def calculate_delivery_score(project: dict) -> int:
+    """Calculate a 0-100 delivery score using delivery signals."""
+    score = 100
+    score -= project.get("blocked_items", 0) * 10
+    score -= project.get("open_risks", 0) * 5
+    score -= max(project.get("schedule_variance_days", 0), 0) * 2
+    return max(score, 0)
 
 
 def calculate_project_health(project: dict) -> str:
-    """Calculate project health from delivery metrics."""
-    if project["blocked_items"] > 3:
+    """Classify program health using blockers, schedule variance, and risk volume."""
+    score = calculate_delivery_score(project)
+
+    if project.get("blocked_items", 0) > 3:
         return "Red"
-    if project["schedule_variance_days"] > 10:
+    if project.get("schedule_variance_days", 0) > 10:
         return "Red"
-    if project["schedule_variance_days"] > 3 or project["open_risks"] > 5:
+    if score < 70:
+        return "Red"
+    if project.get("schedule_variance_days", 0) > 3 or project.get("open_risks", 0) > 5:
         return "Yellow"
     return "Green"
 
 
+def classify_risk_level(project: dict) -> str:
+    """Translate risk signals into a leadership-friendly risk level."""
+    if project.get("blocked_items", 0) >= 4 or project.get("schedule_variance_days", 0) > 10:
+        return "High"
+    if project.get("open_risks", 0) > 5 or project.get("schedule_variance_days", 0) > 3:
+        return "Medium"
+    return "Low"
+
+
 def recommend_action(health: str) -> str:
-    """Recommend action based on project health."""
     if health == "Green":
         return "Continue standard delivery cadence and monitor dependencies."
     if health == "Yellow":
@@ -25,18 +40,21 @@ def recommend_action(health: str) -> str:
 
 
 def generate_executive_summary(project: dict) -> str:
-    """Generate an executive-ready status summary."""
     health = calculate_project_health(project)
+    delivery_score = calculate_delivery_score(project)
+    risk_level = classify_risk_level(project)
 
     return f"""
 Project: {project['project_name']}
 Status: {health}
+Delivery Score: {delivery_score}/100
+Risk Level: {risk_level}
 
 Executive Summary:
-The {project['project_name']} initiative is currently rated {health}.
+The {project['project_name']} initiative is currently rated {health}. 
 The team has completed {project['completed_workstreams']} of {project['total_workstreams']} workstreams.
 
-Key Risks:
+Key Delivery Signals:
 - Open risks: {project['open_risks']}
 - Blocked items: {project['blocked_items']}
 - Schedule variance: {project['schedule_variance_days']} days
@@ -46,14 +64,14 @@ Recommended Action:
 """.strip()
 
 
-def main() -> None:
-    base_path = Path(__file__).resolve().parents[1]
-
-    with open(base_path / "input" / "project_status.json", encoding="utf-8") as f:
-        project = json.load(f)
-
-    print(generate_executive_summary(project))
-
-
 if __name__ == "__main__":
-    main()
+    sample_project = {
+        "project_name": "AI Dataset Onboarding Automation",
+        "completed_workstreams": 3,
+        "total_workstreams": 5,
+        "open_risks": 4,
+        "blocked_items": 1,
+        "schedule_variance_days": 5
+    }
+
+    print(generate_executive_summary(sample_project))

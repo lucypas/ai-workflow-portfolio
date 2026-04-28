@@ -1,5 +1,0 @@
-{
-  "required_columns": ["customer_id", "event_timestamp", "channel", "event_type"],
-  "max_null_rate": 0.05,
-  "max_freshness_hours": 24
-}

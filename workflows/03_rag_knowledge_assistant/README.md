@@ -1,12 +1,27 @@
-# RAG-Style Knowledge Assistant
+# RAG Knowledge Assistant for Program & Data Teams
 
-This workflow demonstrates a lightweight retrieval-augmented generation pattern using mock internal knowledge base documents.
+## Purpose
 
-It demonstrates:
+This workflow simulates a lightweight retrieval-based knowledge assistant.
 
-- simple document retrieval
-- scoring based on query/document overlap
-- answer generation with cited source titles
-- portfolio-safe RAG concepts without external APIs
+It helps program and data teams retrieve relevant guidance from internal standards, onboarding documentation, and reporting policies.
 
-This is intentionally simple so it can run locally without paid API keys.
+## Capabilities
+
+- Retrieves relevant documents from a mock knowledge base
+- Ranks sources by relevance score
+- Calculates confidence per retrieved source
+- Generates an answer with cited source titles
+- Provides a fallback response when confidence is too low
+
+## Portfolio Positioning
+
+This workflow demonstrates the core pattern behind Retrieval-Augmented Generation (RAG):
+retrieve relevant context first, then generate a grounded answer.
+
+It is relevant for:
+- AI Knowledge Management
+- Program Operations
+- Data Governance
+- Internal Documentation Assistants
+- AI Product Use Cases

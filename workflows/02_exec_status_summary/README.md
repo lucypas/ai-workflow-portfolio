@@ -1,12 +1,26 @@
-# Executive Status Summary Generator
+# AI Executive Reporting & Delivery Health Engine
 
-This workflow turns structured delivery metrics into an executive-style program health summary.
+## Purpose
 
-It demonstrates:
+This workflow simulates an AI-assisted executive reporting engine for technical programs.
 
-- status calculation logic
-- risk/blocker interpretation
-- recommended action generation
-- executive communication automation
+It converts project delivery metrics into structured executive summaries, delivery health status, risk signals, and recommended actions.
 
-This is a simplified portfolio-safe version using mock project data only.
+## Capabilities
+
+- Calculates project health: Green / Yellow / Red
+- Calculates delivery score from blockers, risks, and schedule variance
+- Classifies risk level
+- Generates executive-ready status summaries
+- Recommends actions based on delivery health
+
+## Portfolio Positioning
+
+This workflow demonstrates how AI can support leadership visibility, program governance, and decision-making.
+
+It is relevant for:
+- Technical Program Management
+- AI Product Operations
+- Executive Reporting Automation
+- Delivery Governance
+- Portfolio Health Reporting

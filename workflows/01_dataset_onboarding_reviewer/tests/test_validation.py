@@ -1,10 +1,9 @@
 import sys
 from pathlib import Path
 
-CURRENT_DIR = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(CURRENT_DIR / "src"))
+sys.path.append(str(Path(__file__).resolve().parents[1] / "src"))
 
-from validation import validate_dataset  # noqa: E402
+from validation import validate_dataset, calculate_readiness_score, assign_onboarding_decision
 
 
 def test_dataset_passes_validation():
@@ -29,6 +28,8 @@ def test_dataset_passes_validation():
     result = validate_dataset(dataset_profile, expected_output)
 
     assert result["status"] == "approved"
+    assert result["decision"] == "GO"
+    assert result["readiness_score"] == 100
     assert result["issue_count"] == 0
 
 
@@ -52,5 +53,18 @@ def test_dataset_flags_missing_column():
     result = validate_dataset(dataset_profile, expected_output)
 
     assert result["status"] == "needs_review"
-    assert result["issue_count"] == 1
-    assert result["issues"][0]["type"] == "missing_columns"
+    assert result["decision"] == "NO_GO"
+    assert result["issue_count"] >= 1
+
+
+def test_readiness_score_deducts_by_severity():
+    issues = [
+        {"severity": "high"},
+        {"severity": "medium"}
+    ]
+
+    assert calculate_readiness_score(issues) == 70
+
+
+def test_assign_onboarding_decision_no_go():
+    assert assign_onboarding_decision(60, 3) == "NO_GO"

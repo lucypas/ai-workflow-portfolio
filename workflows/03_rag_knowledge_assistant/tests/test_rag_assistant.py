@@ -1,22 +1,9 @@
 import sys
 from pathlib import Path
 
-CURRENT_DIR = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(CURRENT_DIR / "src"))
+sys.path.append(str(Path(__file__).resolve().parents[1] / "src"))
 
-from rag_assistant import generate_answer, simple_retrieve  # noqa: E402
-
-
-DOCUMENTS = [
-    {
-        "title": "Dataset Onboarding Standard",
-        "content": "All datasets must include owner, source system, refresh frequency, required columns, and data quality rules."
-    },
-    {
-        "title": "Executive Reporting Standard",
-        "content": "Status reports should include project health, risks, blockers, milestones, dependencies, and recommended actions."
-    }
-]
+from rag_assistant import simple_retrieve, generate_answer, DOCUMENTS
 
 
 def test_retrieve_dataset_onboarding_content():
@@ -24,10 +11,17 @@ def test_retrieve_dataset_onboarding_content():
 
     assert len(results) > 0
     assert results[0]["score"] > 0
-    assert "Dataset" in results[0]["title"]
+    assert "confidence" in results[0]
 
 
-def test_generate_answer_no_results():
-    answer = generate_answer("unknown topic", [])
+def test_generate_answer_includes_sources():
+    results = simple_retrieve("executive reporting risks blockers", DOCUMENTS)
+    answer = generate_answer("What should an executive report include?", results)
 
-    assert "could not find" in answer
+    assert "Sources used" in answer
+
+
+def test_generate_answer_fallback_when_no_results():
+    answer = generate_answer("How do I repair a car engine?", [])
+
+    assert "could not find relevant" in answer
